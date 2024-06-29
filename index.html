@@ -89,6 +89,18 @@
             0% { transform: scale(0); opacity: 1; }
             100% { transform: scale(20); opacity: 0; }
         }
+        .click-cracker {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: click-cracker 1s ease-out;
+            pointer-events: none;
+        }
+        @keyframes click-cracker {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(40); opacity: 0; }
+        }
         
         /* レスポンシブデザイン */
         @media (max-width: 768px) {
@@ -152,6 +164,20 @@
             setTimeout(() => cracker.remove(), 1000);
         }
 
+        function createClickCracker(event) {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            for (let i = 0; i < 10; i++) {
+                const cracker = document.createElement('div');
+                cracker.className = 'click-cracker';
+                cracker.style.left = event.clientX + 'px';
+                cracker.style.top = event.clientY + 'px';
+                cracker.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                cracker.style.transform = `rotate(${Math.random() * 360}deg)`;
+                document.body.appendChild(cracker);
+                setTimeout(() => cracker.remove(), 1000);
+            }
+        }
+
         function adjustConfettiRate() {
             const width = window.innerWidth;
             const rate = Math.max(50, Math.floor(width / 15));
@@ -190,6 +216,12 @@
             clearInterval(confettiInterval);
             confettiInterval = setInterval(createConfetti, adjustConfettiRate());
         });
+
+        document.addEventListener('click', createClickCracker);
+        document.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            createClickCracker(event.touches[0]);
+        }, {passive: false});
     </script>
 </body>
 </html>
