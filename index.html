@@ -3,225 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>岡本こなん君 社会復帰大祝祭<br>7/1 18:30まで</title>
+    <title>サプライズ</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background-color: #000;
-            color: #fff;
-            min-height: 100vh;
+            height: 100%;
+            overflow: hidden;
         }
-        .container {
+        #initial-screen, #celebration-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-            background: linear-gradient(45deg, #1a1a1a, #2a2a2a, #3a3a3a);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s;
         }
-        @keyframes gradientBG {
-            0% {background-position: 0% 50%;}
-            50% {background-position: 100% 50%;}
-            100% {background-position: 0% 50%;}
+        #initial-screen {
+            background-color: #1a1a1a;
+            z-index: 10;
+        }
+        #start-button {
+            font-size: 1.5em;
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        #start-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        #celebration-screen {
+            opacity: 0;
+            background-color: #FFA500;
+            z-index: 5;
+        }
+        .content {
+            text-align: center;
+            color: #ffffff;
+            padding: 20px;
+            z-index: 15;
+            position: relative;
         }
         h1 {
-            font-size: 3em;
+            font-size: 2.5em;
             margin-bottom: 20px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-            color: #ffffff;
-            background: rgba(0,0,0,0.5);
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         .countdown {
-            font-size: 4em;
+            font-size: 2em;
             font-weight: bold;
-            color: #ffff00;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-            background: rgba(0,0,0,0.5);
-            padding: 10px;
-            border-radius: 10px;
-            animation: pulse 1s infinite alternate;
-            text-align: center;
             margin: 20px 0;
         }
         .message {
-            font-size: 2em;
-            color: #ffffff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-            background: rgba(0,0,0,0.5);
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
+            font-size: 1.2em;
             margin: 20px 0;
         }
-        @keyframes pulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.05); }
+        #confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
         }
         .confetti {
-            position: fixed;
-            width: 10px;
-            height: 15px;
-            background-color: #f2d74e;
-            animation: confetti 5s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes confetti {
-            0% { transform: translateY(-100vh) translateX(0) rotate(0deg); }
-            100% { transform: translateY(100vh) translateX(100px) rotate(720deg); }
-        }
-        .cracker {
-            position: fixed;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            animation: cracker 1s ease-out;
-            pointer-events: none;
-        }
-        @keyframes cracker {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(20); opacity: 0; }
-        }
-        .click-cracker {
             position: absolute;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            animation: click-cracker 1s ease-out;
-            pointer-events: none;
-        }
-        @keyframes click-cracker {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(40); opacity: 0; }
-        }
-        
-        /* レスポンシブデザイン */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5em;
-            }
-            .countdown {
-                font-size: 3em;
-            }
-            .message {
-                font-size: 1.5em;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2em;
-            }
-            .countdown {
-                font-size: 2.5em;
-            }
-            .message {
-                font-size: 1.2em;
-            }
+            width: 10px;
+            height: 10px;
+            background-color: #f2d74e;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>岡本こなん君！<br>社会復帰大祝祭<br>7/1 18:30まで</h1>
-        <div class="countdown" id="countdown"></div>
-        <p class="message" id="message">新たな出発の日が、<br>いよいよ近づいています！</p>
-        <p class="message">
-            岡本こなん君の社会復帰を心からお祝いします。<br>
-            これまでの経験を糧に、新たな人生の章を開いていく君を、<br>
-            私たちは全力で応援しています！<br>
-            困難を乗り越え、ここまで来た君の勇気と決意に敬意を表します。<br>
-            これからの人生が、希望と成功に満ちたものになることを願っています。<br>
-            おめでとう、そして頑張れ！岡本こなん君！
-        </p>
+    <div id="initial-screen">
+        <button id="start-button">タップしてね（※音量注意）</button>
     </div>
+    <div id="celebration-screen">
+        <div class="content">
+            <h1>岡本こなん君！<br>社会復帰大祝祭</h1>
+            <div class="countdown" id="countdown"></div>
+            <p class="message">
+                新たな出発の日が、いよいよ近づいています！<br>
+                岡本こなん君の社会復帰を心からお祝いします。<br>
+                これまでの経験を糧に、新たな人生の章を開いていく君を、<br>
+                私たちは全力で応援しています！<br>
+                困難を乗り越え、ここまで来た君の勇気と決意に敬意を表します。<br>
+                これからの人生が、希望と成功に満ちたものになることを願っています。<br>
+                おめでとう、そして頑張れ！岡本こなん君！
+            </p>
+        </div>
+    </div>
+    <div id="confetti-container"></div>
+    <audio id="celebration-audio" src="a.mp3"></audio>
 
     <script>
+        const startButton = document.getElementById('start-button');
+        const initialScreen = document.getElementById('initial-screen');
+        const celebrationScreen = document.getElementById('celebration-screen');
+        const audio = document.getElementById('celebration-audio');
+        const countdownElement = document.getElementById('countdown');
+        const confettiContainer = document.getElementById('confetti-container');
+
+        startButton.addEventListener('click', startCelebration);
+
+        function startCelebration() {
+            audio.play().catch(e => console.log("Audio play failed:", e));
+            initialScreen.style.opacity = '0';
+            celebrationScreen.style.opacity = '1';
+            setTimeout(() => {
+                initialScreen.style.display = 'none';
+                createConfetti();
+            }, 1000);
+            updateCountdown();
+            // より高頻度でカウントダウンを更新
+            setInterval(updateCountdown, 10); // 10ミリ秒ごとに更新
+        }
+
         function createConfetti() {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * window.innerWidth + 'px';
-            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-            document.body.appendChild(confetti);
-            setTimeout(() => confetti.remove(), 5000);
-        }
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = -20 + 'px';
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    confettiContainer.appendChild(confetti);
 
-        function createCracker() {
-            const cracker = document.createElement('div');
-            cracker.className = 'cracker';
-            cracker.style.left = Math.random() * window.innerWidth + 'px';
-            cracker.style.top = Math.random() * window.innerHeight + 'px';
-            cracker.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-            document.body.appendChild(cracker);
-            setTimeout(() => cracker.remove(), 1000);
-        }
-
-        function createClickCracker(event) {
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-            for (let i = 0; i < 10; i++) {
-                const cracker = document.createElement('div');
-                cracker.className = 'click-cracker';
-                cracker.style.left = event.clientX + 'px';
-                cracker.style.top = event.clientY + 'px';
-                cracker.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                cracker.style.transform = `rotate(${Math.random() * 360}deg)`;
-                document.body.appendChild(cracker);
-                setTimeout(() => cracker.remove(), 1000);
+                    const animationDuration = Math.random() * 3 + 2;
+                    confetti.animate([
+                        { transform: `translateY(0) rotate(0)`, opacity: 1 },
+                        { transform: `translateY(100vh) rotate(720deg)`, opacity: 0 }
+                    ], {
+                        duration: animationDuration * 1000,
+                        easing: 'linear',
+                        iterations: Infinity
+                    });
+                }, i * 50);
             }
         }
 
-        function adjustConfettiRate() {
-            const width = window.innerWidth;
-            const rate = Math.max(50, Math.floor(width / 15));
-            return rate;
-        }
-
-        let confettiInterval = setInterval(createConfetti, adjustConfettiRate());
-        setInterval(createCracker, 500);
-
-        const countdownElement = document.getElementById('countdown');
-        const messageElement = document.getElementById('message');
-        const targetDate = new Date('2024-07-01T18:30:00+09:00').getTime();
-
         function updateCountdown() {
+            const targetDate = new Date('2024-07-01T18:30:00+09:00').getTime();
             const now = new Date().getTime();
             const distance = targetDate - now;
 
             if (distance < 0) {
                 countdownElement.textContent = "社会復帰おめでとうございます！";
-                messageElement.innerHTML = "新たな人生の幕開けです！<br>大成功を祈っています！";
-                clearInterval(countdownInterval);
                 return;
             }
 
             const hours = Math.floor(distance / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            const milliseconds = Math.floor(distance % 1000);
 
-            countdownElement.innerHTML = `あと<br>${hours}時間${minutes}分${seconds}秒`;
+            countdownElement.textContent = `あと ${hours}時間${minutes}分${seconds}秒${milliseconds.toString().padStart(3, '0')}`;
         }
-
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        window.addEventListener('resize', () => {
-            clearInterval(confettiInterval);
-            confettiInterval = setInterval(createConfetti, adjustConfettiRate());
-        });
-
-        document.addEventListener('click', createClickCracker);
-        document.addEventListener('touchstart', function(event) {
-            event.preventDefault();
-            createClickCracker(event.touches[0]);
-        }, {passive: false});
     </script>
 </body>
 </html>
